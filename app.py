@@ -425,11 +425,11 @@ def format_details(details):
 # ---------------------------------------------------------------------------
 # Database configuration
 # ---------------------------------------------------------------------------
-DB_HOST = os.getenv('MYSQL_HOST', 'localhost')
-DB_USER = os.getenv('MYSQL_USER', 'root')
-DB_PASSWORD = os.getenv('MYSQL_PASSWORD', '')
-DB_NAME = os.getenv('MYSQL_DB', 'nfhsystem')
-DB_PORT = int(os.getenv('MYSQL_PORT', 3306))
+DB_HOST = 'sql.freedb.tech'
+DB_USER = 'u_cYyNbf'
+DB_PASSWORD = '90e96J1vxhi8'
+DB_NAME = 'freedb_1YTB0gUA'
+DB_PORT = 3306
 
 app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
 app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
