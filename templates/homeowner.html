@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>Northfairway Homes - HOA Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='homeowner.css', v='20261001profilefix1') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='session-timeout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nfh-filters.css', v='20261001bsis2') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='document-preview.css', v='20261001preview1') }}">
+</head>
+<body class="homeowner-page">
+    <div id="toast-container" class="toast-container"></div>
+    <div class="portal-frame">
+        <div class="mobile-topbar">
+            <button class="mobile-menu-button" type="button" aria-label="Open navigation" onclick="openMobileNavigation()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="mobile-brand">
+                <span class="mobile-brand-icon"><i class="fa-solid fa-house-chimney"></i></span>
+                <span>Northfairway Homes</span>
+            </div>
+        </div>
+        <div class="mobile-nav-overlay" onclick="closeMobileNavigation()"></div>
+
+        <header class="global-nav-header" id="globalSidebar">
+            <div class="logo-area">
+                <div class="logo-box"><img src="{{ url_for('static', filename='logo.png') }}" alt="NFH Logo" class="logo-img"></div>
+                <div class="home-brand-copy"><strong>Northfairway Homes</strong><span>Homeowners' Association</span></div>
+                <button class="home-sidebar-collapse" id="homeSidebarCollapse" type="button" aria-label="Collapse navigation" title="Collapse navigation"><i class="fa-solid fa-angles-left"></i></button>
+                <button class="sidebar-close" type="button" onclick="closeMobileNavigation()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <nav class="nav-links">
+                <div class="home-nav-section">Overview</div>
+                <a href="#dashboard-view" data-tab-target="dashboard-view" id="nav-dashboard-view" class="active"><i class="fa-solid fa-house"></i><span class="nav-label">Home</span></a>
+                <div class="home-nav-section">Services</div>
+                <a href="#request-view" data-tab-target="request-view" id="nav-request-view"><i class="fa-regular fa-file-lines"></i><span class="nav-label">Request</span></a>
+                <a href="#myrequests-view" data-tab-target="myrequests-view" id="nav-myrequests-view"><i class="fa-solid fa-list-check"></i><span class="nav-label">My Requests</span></a>
+                <a href="#concerns-view" data-tab-target="concerns-view" id="nav-concerns-view"><i class="fa-regular fa-comments"></i><span class="nav-label">Request Concerns</span></a>
+                <a href="#dues-view" data-tab-target="dues-view" id="nav-dues-view"><i class="fa-solid fa-calendar-check"></i><span class="nav-label">Monthly Dues</span></a>
+                <div class="home-nav-section">Account</div>
+                <button class="home-utility-nav" type="button" onclick="openSectionModal('Notifications List'); closeMobileNavigation()" aria-label="Open notifications">
+                    <span class="home-utility-icon"><i class="fa-regular fa-bell"></i></span>
+                    <span class="nav-label">Notifications</span>
+                    <span class="sidebar-notification-badge" id="sidebarBellBadge" aria-label="Unread notifications">0</span>
+                </button>
+            </nav>
+            <div class="home-sidebar-footer">
+                <button class="home-sidebar-signout" type="button" onclick="handleSignOut()">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sign Out</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="home-main-shell">
+        <div class="home-topbar-actions" aria-label="Homeowner account controls">
+            
+            <div class="home-account-menu">
+                <button class="home-account-button" type="button" onclick="toggleHomeAccountMenu(this)" aria-haspopup="menu" aria-expanded="false">
+                    <span class="avatar-mini" id="topBarAvatar" aria-hidden="true"></span>
+                    <span class="home-account-copy"><strong class="shared-user-name">User</strong><small>Homeowner</small></span>
+                    <i class="fa-solid fa-chevron-down home-account-chevron" aria-hidden="true"></i>
+                </button>
+                <div class="home-account-dropdown nfh-home-account-dropdown" role="menu" hidden>
+                    <div class="account-menu-heading nfh-home-account-heading">
+                        <span class="home-dropdown-avatar" id="homeDropdownAvatar" aria-hidden="true">H</span>
+                        <div><strong class="shared-user-name">User</strong><span>Homeowner</span><small id="homeAccountEmail">NFH-HOA Homeowner Account</small></div>
+                    </div>
+                    <div class="home-account-actions">
+                        <button type="button" role="menuitem" onclick="closeHomeAccountMenu(); switchTab('profile-view')"><span class="account-item-icon"><i class="fa-regular fa-user"></i></span><strong>My Profile</strong></button>
+                        <button type="button" role="menuitem" onclick="closeHomeAccountMenu(); switchTab('settings-view')"><span class="account-item-icon"><i class="fa-solid fa-gear"></i></span><strong>Account Settings</strong></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="dashboard-view" class="tab-content active">
+            <section class="home-dashboard-shell nfh-dashboard-overview" aria-label="Homeowner dashboard overview">
+                <div class="home-dashboard-hero">
+                    <div class="home-dashboard-hero-copy">
+                        <span class="home-dashboard-eyebrow"><i class="fa-solid fa-house"></i> Homeowner Dashboard</span>
+                        <h1>Welcome Back, <span class="shared-first-name">User</span></h1>
+                        <p>Here's a quick view of your current requests and HOA account.</p>
+                    </div>
+                    <div class="home-dashboard-hero-mark" aria-hidden="true"><i class="fa-regular fa-folder-open"></i></div>
+                </div>
+
+                <div class="dashboard-section dashboard-summary-section">
+                    <div class="dashboard-section-heading">
+                        <div>
+                            <h2>Account Overview</h2>
+                        </div>
+                    </div>
+                    <div class="summary-boxes home-summary-strip nfh-home-stats-grid">
+                        <button type="button" class="card card-req home-metric" onclick="openSectionModal('Pending Requests Detail View')">
+                            <div class="card-icon"><i class="fa-regular fa-file-lines"></i></div>
+                            <div class="card-info"><h3>Pending Requests</h3><div class="value" id="activeRequestsCount">0</div><span class="metric-helper">Requests currently in progress</span></div>
+                            <i class="fa-solid fa-chevron-right metric-chevron" aria-hidden="true"></i>
+                        </button>
+                        <div class="summary-divider" aria-hidden="true"></div>
+                        <button type="button" class="card card-due home-metric" id="monthlyDuesMetricCard" onclick="openSectionModal('Monthly Dues Detail')">
+                            <div class="card-icon peso-icon">₱</div>
+                            <div class="card-info"><h3>Monthly HOA Dues</h3><div class="value">₱<span id="outstandingDuesCount">0.00</span></div><span class="metric-helper">Unpaid monthly dues on record</span></div>
+                            <i class="fa-solid fa-chevron-right metric-chevron" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="card card-fee home-metric" onclick="openSectionModal('Pending Request Fees Detail')">
+                            <div class="card-icon"><i class="fa-solid fa-receipt"></i></div>
+                            <div class="card-info"><h3>Pending Request Fees</h3><div class="value">₱<span id="outstandingRequestFeesCount">0.00</span></div><span class="metric-helper">Unpaid fees linked to active requests</span></div>
+                            <i class="fa-solid fa-chevron-right metric-chevron" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-section dashboard-alert-section" id="missingDuesBox" style="display:none;">
+                    <div class="dashboard-alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="dashboard-alert-content">
+                        <div class="dashboard-section-heading compact"><div><span class="dashboard-section-kicker">Attention Required</span><h2>Missing Monthly Dues</h2></div></div>
+                        <p id="missingDuesText"></p>
+                    </div>
+                    <button class="btn-modal-cancel dashboard-alert-action" onclick="openSectionModal('Missing Monthly Dues Detail')">View Details</button>
+                </div>
+
+                <!-- NFH: NO ONLINE PAYMENTS — informational only -->
+                <div class="dashboard-section treasury-information-section">
+                    <div class="dashboard-section-heading">
+                        <div class="section-title-with-icon">
+                            <span class="dashboard-section-icon"><i class="fa-solid fa-circle-info"></i></span>
+                            <div><h2>Payment Assistance</h2></div>
+                        </div>
+                    </div>
+                    <p class="treasurer-instructions">
+                        NFH-HOA accepts <strong>face-to-face cash payment</strong>. Once a paid request is approved and prepared, visit the Treasurer once to pay and receive the document. The Treasurer records both the payment and physical release in the system.
+                    </p>
+                    <div class="treasurer-contact-grid">
+                        <div class="treasurer-office-block">
+                            <span class="contact-label">Office</span>
+                            <strong>{{ treasurer.name }}</strong>
+                        </div>
+                        <div class="treasurer-contact-item"><span class="contact-icon"><i class="fa-solid fa-phone"></i></span><div><span class="contact-label">Phone</span><strong>{{ treasurer.phone }}</strong></div></div>
+                        <div class="treasurer-contact-item"><span class="contact-icon"><i class="fa-solid fa-envelope"></i></span><div><span class="contact-label">Email</span><strong>{{ treasurer.email }}</strong></div></div>
+                        <div class="treasurer-contact-item"><span class="contact-icon"><i class="fa-solid fa-clock"></i></span><div><span class="contact-label">Office Hours</span><strong>{{ treasurer.office_hours }}</strong></div></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-section recent-history-section">
+                    <div class="dashboard-section-heading recent-history-heading">
+                        <div class="section-title-with-icon">
+                            <span class="dashboard-section-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                            <div><h2>Recent Requests</h2></div>
+                        </div>
+                        <a class="view-all-link" onclick="switchTab('myrequests-view')">View all <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="recent-table-wrap">
+                        <table id="requestTable">
+                            <thead><tr>
+                                <th>Recent ID</th><th>Recent Request</th><th>Date Submitted</th>
+                                <th>Fee</th><th>Payment Status</th><th>Status</th><th>Action</th>
+                            </tr></thead>
+                            <tbody id="requestTableBody"><tr><td colspan="7" class="empty-placeholder"><span class="empty-state-icon"><i class="fa-regular fa-folder-open"></i></span><strong>No recent requests yet.</strong><span>Your submitted requests will appear here.</span></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- REQUEST VIEW -->
+        <div id="request-view" class="tab-content">
+            <main class="requests-canvas">
+                <section class="dues-request-lock" id="duesRequestLock" hidden aria-live="polite">
+                    <div class="dues-request-lock-icon"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></div>
+                    <div class="dues-request-lock-copy">
+                        <span>Request eligibility</span>
+                        <h1>Document requests are temporarily unavailable</h1>
+                        <p>You currently have outstanding monthly HOA dues. Please coordinate with the HOA Treasurer before submitting a new document request.</p>
+                        <div class="dues-request-lock-stats"><div><small>Outstanding Balance</small><strong id="requestLockBalance">₱0.00</strong></div><div><small>Unpaid Months</small><strong id="requestLockMonths">0</strong></div></div>
+                    </div>
+                    <div class="dues-lock-actions"><button type="button" class="dues-lock-action" onclick="fetchUserData({forceRender:true})"><i class="fa-solid fa-rotate"></i> Refresh Status</button><button type="button" class="dues-lock-action dues-lock-secondary" onclick="switchTab('dues-view')">View Monthly Dues</button></div>
+                </section>
+                <div class="home-filter-panel home-service-filter-panel" id="serviceFilterPanel">
+                    <div class="home-filter-header">
+                        <div class="home-filter-title"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><strong>Find a Service</strong></div>
+                        <span class="home-filter-summary" id="serviceFilterSummary">Showing all services</span>
+                    </div>
+                    <div class="home-filter-controls">
+                        <div class="home-filter-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="serviceSearchInput" type="search" autocomplete="off" placeholder="Search document or service..." aria-label="Search document or service">
+                        </div>
+                        <label class="home-filter-field"><span>Category</span>
+                            <select id="serviceCategoryFilter" aria-label="Filter services by category"><option value="">All categories</option></select>
+                        </label>
+                        <button class="home-filter-clear" id="clearServiceFilters" type="button"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i><span>Reset</span></button>
+                    </div>
+                </div>
+                <div class="preloaded-service-note"><i class="fa-solid fa-circle-check" aria-hidden="true"></i><span>The standard NFH-HOA documents below are already configured in the system with their current service fees. Select the document you need.</span></div>
+                <div id="dynamicServiceCatalog" class="dynamic-service-catalog" aria-live="polite">
+                    <div class="service-catalog-loading"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i><span>Loading available services...</span></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- MY REQUESTS VIEW (grouped by category, correction workflow) -->
+        <div id="myrequests-view" class="tab-content">
+            <div class="welcome-banner" style="padding:24px;">
+                <h1>My Requests</h1>
+                <p>Your submitted requests grouped by category. Requests returned "For Correction" can be updated and resubmitted here.</p>
+            </div>
+            <div class="home-filter-panel" id="homeRequestFilterPanel">
+                <div class="home-filter-header">
+                    <div class="home-filter-title"><i class="fa-solid fa-filter" aria-hidden="true"></i><strong>Search &amp; Filter Requests</strong></div>
+                    <span class="home-filter-summary" id="homeRequestFilterSummary">Loading requests...</span>
+                </div>
+                <div class="home-filter-controls home-request-controls">
+                    <div class="home-filter-search">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input id="homeRequestSearch" type="search" autocomplete="off" placeholder="Search request ID, document, or purpose..." aria-label="Search your requests">
+                    </div>
+                    <label class="home-filter-field"><span>Status</span>
+                        <select id="homeRequestStatusFilter" aria-label="Filter by request status"><option value="">All statuses</option></select>
+                    </label>
+                    <label class="home-filter-field"><span>Payment</span>
+                        <select id="homeRequestPaymentFilter" aria-label="Filter by payment status"><option value="">All payments</option></select>
+                    </label>
+                    <label class="home-filter-field"><span>Category</span>
+                        <select id="homeRequestCategoryFilter" aria-label="Filter by request category"><option value="">All categories</option></select>
+                    </label>
+                    <label class="home-filter-field"><span>Sort</span>
+                        <select id="homeRequestSort" aria-label="Sort your requests">
+                            <option value="newest">Newest first</option>
+                            <option value="oldest">Oldest first</option>
+                            <option value="type">Request type A–Z</option>
+                            <option value="status">Status A–Z</option>
+                        </select>
+                    </label>
+                    <button class="home-filter-clear" id="clearHomeRequestFilters" type="button"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i><span>Reset</span></button>
+                </div>
+            </div>
+            <div id="myRequestsContainer" class="main-grid single-column-grid">
+                <div class="section-box"><p class="empty-placeholder">Loading your requests...</p></div>
+            </div>
+        </div>
+
+        <!-- REQUEST CONCERNS -->
+        <div id="concerns-view" class="tab-content">
+            <div class="concern-center-shell">
+                <div class="concern-center-heading">
+                    <div><span class="concern-kicker">Request Support</span><h1>Request Concerns</h1><p>View the concerns you submitted and the official response from the assigned HOA officer.</p></div>
+                </div>
+                <div class="home-filter-panel concern-filter-panel">
+                    <div class="home-filter-header"><div class="home-filter-title"><i class="fa-solid fa-magnifying-glass"></i><strong>Find a Concern</strong></div><span class="home-filter-summary" id="concernFilterSummary">Loading concerns...</span></div>
+                    <div class="home-filter-controls">
+                        <div class="home-filter-search"><i class="fa-solid fa-magnifying-glass"></i><input id="concernSearch" type="search" placeholder="Search request ID, service, or concern..." aria-label="Search concerns"></div>
+                        <label class="home-filter-field"><span>Status</span><select id="concernStatusFilter"><option value="">All statuses</option><option>Open</option><option>Under Review</option><option>Responded</option><option>Resolved</option></select></label>
+                        <label class="home-filter-field"><span>Sort</span><select id="concernSort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
+                        <button class="home-filter-clear" id="clearConcernFilters" type="button"><i class="fa-solid fa-rotate-left"></i><span>Reset</span></button>
+                    </div>
+                </div>
+                <div id="concernCenterList" class="concern-center-list"><div class="empty-placeholder">Loading request concerns...</div></div>
+            </div>
+        </div>
+
+        <!-- MONTHLY DUES — request-eligibility information only -->
+        <div id="dues-view" class="tab-content">
+            <div class="dues-page-shell">
+                <div class="dues-page-header">
+                    <div>
+                        <span class="dues-kicker">Request Eligibility</span>
+                        <h1>Monthly HOA Dues</h1>
+                        <p>View unpaid monthly dues recorded by the Treasurer. Dues information is used only for request eligibility and clearance.</p>
+                    </div>
+                    <div class="dues-balance-card" id="duesPageBalanceCard">
+                        <span>Outstanding Monthly Dues</span>
+                        <strong>₱<span id="duesPageBalance">0.00</span></strong>
+                        <small id="duesPageCount">No unpaid dues</small>
+                    </div>
+                </div>
+                <section class="dues-panel">
+                    <div class="dues-panel-heading"><div><h2>Unpaid Months</h2><p>These records are maintained and confirmed by the Treasurer. Payments remain face-to-face.</p></div></div>
+                    <div id="duesMonthList" class="dues-month-list"><div class="empty-placeholder">No unpaid monthly dues.</div></div>
+                    <div class="commitment-note"><i class="fa-solid fa-circle-info"></i><span>This system does not process online payments or manage installment commitments. It only reflects dues status relevant to document-request eligibility.</span></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- PROFILE VIEW (unchanged structure) -->
+        <div id="profile-view" class="tab-content">
+            <div class="profile-container">
+                <div class="info-card">
+                    <form id="profileForm" novalidate>
+                        <div class="section-title">Personal Information</div>
+                        <div class="grid-row">
+                            <div class="form-group"><label>First Name:</label><div class="value-container"><span class="static-text" data-field="firstName">-</span><input type="text" class="edit-input" name="firstName" required data-msg="First name required"><div class="error-msg"></div></div></div>
+                            <div class="form-group"><label>Gender:</label><div class="value-container"><span class="static-text" data-field="gender">NA</span><select class="edit-input" name="gender"><option value="NA">NA</option><option value="Male">Male</option><option value="Female">Female</option><option value="Prefer Not to Say">Prefer Not to Say</option></select></div></div>
+                            <div class="form-group"><label>Last Name:</label><div class="value-container"><span class="static-text" data-field="lastName">-</span><input type="text" class="edit-input" name="lastName" required><div class="error-msg"></div></div></div>
+                            <div class="form-group"><label>Date of Birth:</label><div class="value-container"><span class="static-text" data-field="dob">-</span><input type="date" class="edit-input" name="dob" required><div class="error-msg"></div></div></div>
+                            <div class="form-group"><label>Middle Name:</label><div class="value-container"><span class="static-text" data-field="middleName">N/A</span><input type="text" class="edit-input" name="middleName"></div></div>
+                            <div class="form-group"><label>Civil Status:</label><div class="value-container"><span class="static-text" data-field="civilStatus">Single</span><select class="edit-input" name="civilStatus"><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select></div></div>
+                            <div class="form-group"><label>Suffix:</label><div class="value-container"><span class="static-text" data-field="suffix">N/A</span><input type="text" class="edit-input" name="suffix" placeholder="Jr., Sr., III"></div></div>
+                        </div>
+                        <div class="section-title">Address Information</div>
+                        <div class="grid-row">
+                            <div class="form-group"><label>Subdivision:</label><div class="value-container"><span class="static-text static-locked" data-field="subdivision">North Fairway Homes</span></div></div>
+                            <div class="form-group"><label>Block:</label><div class="value-container"><span class="static-text" data-field="block">Not Specified</span><input type="text" class="edit-input" name="block" placeholder="Block 5"></div></div>
+                            <div class="form-group"><label>Lot:</label><div class="value-container"><span class="static-text" data-field="lot">Not Specified</span><input type="text" class="edit-input" name="lot" placeholder="Lot 10"></div></div>
+                        </div>
+                        <div class="section-title">Contact Information</div>
+                        <div class="grid-row">
+                            <div class="form-group"><label>Email Address:</label><div class="value-container"><span class="static-text" data-field="email">-</span><input type="email" class="edit-input" name="email" required data-type="email"></div></div>
+                            <div class="form-group"><label>Mobile Number:</label><div class="value-container"><span class="static-text" data-field="mobile">-</span><input type="text" class="edit-input" name="mobile" required></div></div>
+                        </div>
+                        <div class="section-title">Other Information</div>
+                        <div class="grid-row">
+                            <div class="form-group"><label>Number of Household Members:</label><div class="value-container"><span class="static-text" data-field="household">1</span><input type="number" class="edit-input" name="household" required></div></div>
+                            <div class="form-group"><label>Date Joined:</label><div class="value-container"><span class="static-text static-locked" data-field="dateJoined">-</span></div></div>
+                        </div>
+                        <div class="action-footer">
+                            <button type="button" class="btn btn-cancel" id="btnCancel">Cancel</button>
+                            <button type="submit" class="btn btn-save" id="btn-save-profile">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="sidebar-card">
+                    <div class="banner-bg">
+                        <div class="avatar-large-container">
+                            <div class="avatar-large">
+                                <i class="fa-solid fa-user default-avatar-icon" id="defaultAvatarIcon"></i>
+                                <img id="profileImagePreview" src="" alt="Profile Picture" class="avatar-img-preview" style="display:none;">
+                                <label for="profilePhotoInput" class="camera-icon" title="Change Profile Picture"><i class="fa-solid fa-camera"></i></label>
+                                <input type="file" id="profilePhotoInput" accept="image/jpeg,image/png,image/jpg" onchange="previewProfilePicture(event)" style="display:none;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-name" id="sidebar-display-name">User Name</div>
+                    <div class="profile-id" id="sidebar-homeowner-id">Homeowner ID: -</div>
+                    <button type="button" class="btn-edit-action" id="btnEditProfile">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        Edit Profile Information
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS VIEW (unchanged) -->
+        <div id="settings-view" class="tab-content">
+            <div class="profile-banner-settings">
+                <div class="large-avatar-settings" id="settingsAvatarLetter">U</div>
+                <div class="profile-info"><h2 class="shared-user-name">User Name</h2><p>Homeowner</p></div>
+            </div>
+            <div class="settings-grid">
+                <div class="dashboard-card">
+                    <div class="card-header-settings">
+                        <div class="header-left-settings">
+                            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+                            <div class="header-text"><h3>Notification Preferences</h3><p>Choose how and when you want to be notified</p></div>
+                        </div>
+                    </div>
+                    <div class="preference-row"><div class="pref-text"><strong>Email Notifications</strong><span>Updates about your requests and dues.</span></div><label class="toggle-switch"><input type="checkbox" id="toggle-email" checked onchange="handleToggleChange('Email')"><span class="slider"></span></label></div>
+                </div>
+                <div class="dashboard-card" id="emergency-section">
+                    <div class="card-header-settings">
+                        <div class="header-left-settings">
+                            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+                            <div class="header-text"><h3>Emergency Contact</h3><p>Provide a contact in case of emergencies.</p></div>
+                        </div>
+                        <div class="action-btn-group" id="emergency-actions"><button class="edit-link" onclick="toggleEdit('emergency')">Edit</button></div>
+                    </div>
+                    <div class="form-row-settings">
+                        <div class="field-group-settings"><label class="field-label">Contact Name</label><input type="text" id="em-name" class="input-display" placeholder="N/A" disabled></div>
+                        <div class="field-group-settings"><label class="field-label">Contact Number</label><input type="text" id="em-number" class="input-display" placeholder="N/A" disabled></div>
+                        <div class="field-group-settings"><label class="field-label">Relationship</label><select id="em-relationship" class="input-display" disabled><option>Spouse</option><option>Siblings</option><option>Parent</option><option>Children</option><option>Guardian</option></select></div>
+                    </div>
+                </div>
+                <div class="dashboard-card" id="security-section">
+                    <div class="card-header-settings">
+                        <div class="header-left-settings">
+                            <div class="icon-container"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+                            <div class="header-text"><h3>Security & Change Password</h3><p>Manage your account password securely.</p></div>
+                        </div>
+                        <div class="action-btn-group" id="security-actions"><button class="edit-link" onclick="toggleEdit('security')">Edit</button></div>
+                    </div>
+                    <div class="form-row-settings">
+                        <div class="field-group-settings"><label class="field-label">Current Password</label><div class="password-field"><input type="password" id="sec-current" class="input-display" disabled autocomplete="current-password"><button type="button" class="password-toggle" data-toggle-password="sec-current" aria-label="Show password" title="Show password"><svg class="eye-icon eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg><svg class="eye-icon eye-closed" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M3 3l18 18"/><path d="M10.6 6.2A9.7 9.7 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.8M6.2 6.2C3.8 8 2.5 12 2.5 12s3.5 6 9.5 6a9.8 9.8 0 0 0 3.2-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div><span class="password-inline-message" data-password-message-for="sec-current" aria-live="polite"></span></div>
+                        <div class="field-group-settings"><label class="field-label">New Password</label><div class="password-field"><input type="password" id="sec-new" class="input-display" disabled autocomplete="new-password"><button type="button" class="password-toggle" data-toggle-password="sec-new" aria-label="Show password" title="Show password"><svg class="eye-icon eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg><svg class="eye-icon eye-closed" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M3 3l18 18"/><path d="M10.6 6.2A9.7 9.7 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.8M6.2 6.2C3.8 8 2.5 12 2.5 12s3.5 6 9.5 6a9.8 9.8 0 0 0 3.2-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div><span class="password-inline-message" data-password-message-for="sec-new" aria-live="polite"></span><small class="password-requirements">Use at least 8 characters.</small></div>
+                        <div class="field-group-settings"><label class="field-label">Confirm New Password</label><div class="password-field"><input type="password" id="sec-confirm" class="input-display" disabled autocomplete="new-password"><button type="button" class="password-toggle" data-toggle-password="sec-confirm" aria-label="Show password" title="Show password"><svg class="eye-icon eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg><svg class="eye-icon eye-closed" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M3 3l18 18"/><path d="M10.6 6.2A9.7 9.7 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.8M6.2 6.2C3.8 8 2.5 12 2.5 12s3.5 6 9.5 6a9.8 9.8 0 0 0 3.2-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div><span class="password-inline-message" data-password-message-for="sec-confirm" aria-live="polite"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </main>
+    </div>
+
+    <!-- GENERAL MODAL -->
+    <div class="modal-overlay" id="generalModal">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeGeneralModal()">&times;</button>
+            <div class="modal-title" id="generalModalTitle">Detail View</div>
+            <div id="generalModalBody"></div>
+        </div>
+    </div>
+
+    <!-- HOMEOWNER LOGOUT CONFIRMATION -->
+
+    <div class="modal-overlay" id="homeownerLogoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+        <div class="modal-box logout-confirm-card">
+            <button class="close-modal" type="button" onclick="closeHomeownerLogoutModal()" aria-label="Close">&times;</button>
+            <div class="logout-confirm-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+            <div class="modal-title" id="logoutTitle">Sign Out</div>
+            <p class="logout-confirm-copy">Are you sure you want to sign out of your account?</p>
+            <div class="modal-actions logout-confirm-actions">
+                <button type="button" class="btn-modal-cancel" onclick="closeHomeownerLogoutModal()">Cancel</button>
+                <button type="button" class="btn-submit logout-confirm-btn" onclick="confirmHomeownerSignOut()">Sign Out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANCELLATION CONFIRM -->
+    <div class="modal-overlay" id="cancelConfirmModal">
+        <div class="modal-box" style="max-width:420px;text-align:center;">
+            <button class="close-modal" onclick="closeCancelConfirmModal()">&times;</button>
+            <div class="modal-header" style="border-bottom:none;padding-bottom:0;">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size:2.5rem;color:#d9534f;margin-bottom:10px;"></i>
+                <h3 style="font-size:1.2rem;">Are you sure you want to cancel this request?</h3>
+            </div>
+            <p style="font-size:0.9rem;color:#555;margin:15px 0;">This action cannot be undone. The request will be marked as Cancelled and removed from active processing, but remains in your history.</p>
+            <textarea id="cancelReasonInput" placeholder="Optional reason for cancellation" style="width:100%;border:1px solid var(--border-color);border-radius:8px;padding:8px 10px;font-size:0.85rem;margin-bottom:12px;" rows="2"></textarea>
+            <div class="modal-actions" style="justify-content:center;gap:10px;margin-top:8px;">
+                <button type="button" class="btn-modal-cancel" onclick="closeCancelConfirmModal()">Keep Request</button>
+                <button type="button" class="btn-submit" id="btn-confirm-cancel-request" style="background:#d9534f;">Confirm Cancellation</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DYNAMIC REQUEST MODAL -->
+    <div class="modal-overlay" id="requestModal">
+        <div class="modal-box request-form-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button class="close-modal request-modal-close" id="closeRequestModalBtn" type="button" aria-label="Close request form">&times;</button>
+
+            <div class="request-modal-brand">
+                <div class="request-brand-mark"><i class="fa-solid fa-house-chimney"></i></div>
+                <div class="hoa-meta-header">
+                    <strong>NORTH FAIRWAY HOMES HOMEOWNERS ASSOCIATION INC.</strong>
+                    <span>Sitio Pastol, Brgy. Muzon West, City of San Jose del Monte, Bulacan 3023</span>
+                    <small>HLURB Registration Number: NTR-20986-R &nbsp;|&nbsp; TIN No: 486-778-923-000</small>
+                </div>
+            </div>
+
+            <div class="request-modal-heading">
+                <div class="request-heading-icon"><i class="fa-regular fa-file-lines"></i></div>
+                <div class="modal-header">
+                    <span class="request-eyebrow">Document Request</span>
+                    <h3 id="modalTitle">Dynamic Form Header</h3>
+                    <p id="modalDesc">Form description.</p>
+                </div>
+            </div>
+
+            <div class="modal-meta-tags request-summary-card">
+                <div class="request-summary-item">
+                    <span class="request-summary-icon"><i class="fa-regular fa-file-lines"></i></span>
+                    <div>
+                        <span class="meta-label">Selected Document Type</span>
+                        <span class="meta-val-service" id="metaService">-</span>
+                    </div>
+                </div>
+                <div class="request-summary-item request-summary-fee">
+                    <span class="request-summary-icon"><i class="fa-solid fa-peso-sign"></i></span>
+                    <div>
+                        <span class="meta-label">Total Fee</span>
+                        <strong class="meta-val-cat" id="modalFeeText">₱50.00</strong>
+                    </div>
+                </div>
+            </div>
+
+            <form id="submissionForm" onsubmit="handleRequestSubmit(event)" class="request-submission-form">
+                <section class="request-form-section request-details-section">
+                    <div class="request-section-heading">
+                        <span class="request-section-icon"><i class="fa-regular fa-pen-to-square"></i></span>
+                        <div>
+                            <h4>Request Details</h4>
+                            <p>Review and complete the information required for this document.</p>
+                        </div>
+                    </div>
+                    <div class="modal-form" id="dynamicFormFieldsContainer"></div>
+                </section>
+
+                <div class="modal-actions request-modal-actions">
+                    <div class="request-action-note"><i class="fa-solid fa-shield-halved"></i><span>Please review the information before submitting.</span></div>
+                    <div class="request-action-buttons">
+                        <button type="button" class="btn-modal-cancel" id="cancelRequestModalBtn">Cancel</button>
+                        <button type="submit" class="btn-submit" id="btn-submit-request"><i class="fa-regular fa-paper-plane"></i><span>Submit Document Request</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function previewProfilePicture(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const allowed = ['image/jpeg','image/jpg','image/png'];
+            if (!allowed.includes(file.type)) {
+                if (window.showToastNotification) window.showToastNotification('Only JPG, JPEG, PNG are allowed.', 'error');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                if (window.showToastNotification) window.showToastNotification('File too large (max 5MB).', 'error');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch('/api/profile/photo', { method:'POST', body: formData })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const imgPreview = document.getElementById('profileImagePreview');
+                        const defaultIcon = document.getElementById('defaultAvatarIcon');
+                        if (imgPreview) { imgPreview.src = data.image_url; imgPreview.style.display = 'block'; }
+                        if (defaultIcon) { defaultIcon.style.display = 'none'; }
+                        const topAvatar = document.getElementById('topBarAvatar');
+                        if (topAvatar) { topAvatar.style.backgroundImage = `url('${data.image_url}')`; topAvatar.style.backgroundSize='cover'; topAvatar.style.backgroundPosition='center'; }
+                        if (window.showToastNotification) window.showToastNotification(data.message, 'success');
+                    } else {
+                        if (window.showToastNotification) window.showToastNotification(data.message || 'Failed to upload photo.', 'error');
+                    }
+                }).catch(err => console.error('Error uploading image:', err));
+        }
+    </script>
+
+    <!-- Shared 30-minute inactivity security warning -->
+    <div class="session-timeout-overlay" id="sessionTimeoutModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="sessionTimeoutTitle" aria-describedby="sessionTimeoutDescription" data-user-key="{{ session.user_id }}" data-timeout-seconds="{{ session_timeout_seconds }}" data-warning-seconds="{{ session_warning_seconds }}">
+        <div class="session-timeout-dialog" role="document">
+            <div class="session-timeout-accent"></div>
+            <div class="session-timeout-body">
+                <div class="session-timeout-heading">
+                    <span class="session-timeout-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 1.8"/><path d="M8.1 2.9 6.3 5.1M15.9 2.9l1.8 2.2"/></svg></span>
+                    <div><p class="session-timeout-eyebrow">Account Security</p><h2 class="session-timeout-title" id="sessionTimeoutTitle">Session Expiring Soon</h2></div>
+                </div>
+                <p class="session-timeout-copy" id="sessionTimeoutDescription">For your account security, your session will automatically end after 30 minutes of inactivity. Select <strong>Stay Signed In</strong> to continue your current session.</p>
+                <div class="session-timeout-countdown" aria-live="polite"><span>Session expires in</span><strong id="sessionTimeoutCountdown">05:00</strong></div>
+            </div>
+            <div class="session-timeout-actions">
+                <button type="button" class="session-timeout-btn session-timeout-btn-secondary" id="sessionSignOutNow">Sign Out Now</button>
+                <button type="button" class="session-timeout-btn session-timeout-btn-primary" id="sessionStaySignedIn">Stay Signed In</button>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='csrf.js', v='20261001bsis1') }}"></script>
+    <script src="{{ url_for('static', filename='session-timeout.js') }}"></script>
+    <script src="{{ url_for('static', filename='document-preview.js', v='20261001preview1') }}"></script>
+    <script src="{{ url_for('static', filename='form-usability.js', v='20261003final1') }}"></script>
+    <script src="{{ url_for('static', filename='homeowner.js', v='20261001preview1') }}"></script>
+
+    <div class="modal-overlay" id="concernModal" aria-hidden="true">
+      <div class="modal-box concern-modal-box">
+        <div class="modal-header"><div><h3>Report a Concern</h3><p>Request <strong id="concernRequestId"></strong></p></div><button class="close-btn" type="button" onclick="closeConcernModal()" aria-label="Close">&times;</button></div>
+        <div class="modal-body"><p class="concern-request-type" id="concernRequestType"></p><label for="concernSubject"><strong>Subject</strong></label><input id="concernSubject" class="form-input" maxlength="150" placeholder="e.g. Clarification about correction"><label for="concernMessage"><strong>Concern</strong></label><textarea id="concernMessage" class="form-input" rows="5" placeholder="Describe your concern about this request." maxlength="1500"></textarea><div id="existingConcernList" class="concern-history"></div></div>
+        <div class="modal-footer"><button class="btn-secondary" type="button" onclick="closeConcernModal()">Cancel</button><button class="btn-submit" type="button" onclick="submitConcern()">Submit Concern</button></div>
+      </div>
+    </div>
+
+</body>
+</html>

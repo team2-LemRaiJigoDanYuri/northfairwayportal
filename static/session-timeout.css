@@ -1,0 +1,75 @@
+/* ================================================================
+   NFH-HOA SHARED SESSION INACTIVITY WARNING
+   Scoped, role-neutral styles matching the enterprise green palette.
+   ================================================================ */
+.session-timeout-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(12, 34, 27, 0.48);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+}
+.session-timeout-overlay.is-visible { opacity: 1; visibility: visible; }
+.session-timeout-dialog {
+    width: min(100%, 470px);
+    border: 1px solid rgba(35, 91, 68, .18);
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 24px 70px rgba(9, 32, 24, .22);
+    overflow: hidden;
+    transform: translateY(8px) scale(.985);
+    transition: transform .2s ease;
+    font-family: inherit;
+}
+.session-timeout-overlay.is-visible .session-timeout-dialog { transform: translateY(0) scale(1); }
+.session-timeout-accent { height: 4px; background: #245b44; }
+.session-timeout-body { padding: 28px 30px 22px; }
+.session-timeout-heading { display: flex; align-items: flex-start; gap: 15px; }
+.session-timeout-icon {
+    flex: 0 0 44px; width: 44px; height: 44px; border-radius: 12px;
+    display: grid; place-items: center; color: #245b44; background: #edf5f0;
+    border: 1px solid #d9e9df;
+}
+.session-timeout-icon svg { width: 23px; height: 23px; }
+.session-timeout-eyebrow { margin: 0 0 4px; color: #5f766c; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+.session-timeout-title { margin: 0; color: #173c2e; font-size: 21px; line-height: 1.25; font-weight: 700; }
+.session-timeout-copy { margin: 16px 0 0; color: #5e6d66; font-size: 14px; line-height: 1.65; }
+.session-timeout-countdown {
+    margin-top: 20px; padding: 14px 16px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    background: #f4f8f5; border: 1px solid #dce8e1;
+}
+.session-timeout-countdown span { color: #64756d; font-size: 12px; font-weight: 600; }
+.session-timeout-countdown strong { color: #173c2e; font-size: 22px; line-height: 1; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.session-timeout-actions { padding: 0 30px 28px; display: flex; justify-content: flex-end; gap: 10px; }
+.session-timeout-btn {
+    min-height: 42px; padding: 10px 16px; border-radius: 9px; border: 1px solid transparent;
+    font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: background-color .16s ease, border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+.session-timeout-btn:focus-visible { outline: 3px solid rgba(36, 91, 68, .2); outline-offset: 2px; }
+.session-timeout-btn-primary { background: #245b44; color: #fff; border-color: #245b44; box-shadow: 0 6px 16px rgba(36, 91, 68, .16); }
+.session-timeout-btn-primary:hover { background: #1d4e3a; border-color: #1d4e3a; }
+.session-timeout-btn-secondary { background: #fff; color: #56645e; border-color: #d6dfda; }
+.session-timeout-btn-secondary:hover { background: #f6f8f7; border-color: #c7d3cc; color: #34463e; }
+.session-timeout-btn:active { transform: translateY(1px); }
+.session-timeout-btn[disabled] { opacity: .64; cursor: wait; }
+body.session-timeout-open { overflow: hidden; }
+@media (max-width: 560px) {
+    .session-timeout-overlay { padding: 16px; align-items: flex-end; }
+    .session-timeout-dialog { width: 100%; border-radius: 16px 16px 12px 12px; }
+    .session-timeout-body { padding: 24px 22px 18px; }
+    .session-timeout-actions { padding: 0 22px 22px; flex-direction: column-reverse; }
+    .session-timeout-btn { width: 100%; min-height: 46px; }
+    .session-timeout-title { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .session-timeout-overlay, .session-timeout-dialog, .session-timeout-btn { transition: none !important; }
+}
