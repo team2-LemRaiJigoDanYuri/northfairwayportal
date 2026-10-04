@@ -1,0 +1,302 @@
+/* NFH-HOA shared record finding UI — Officer, Executive, Treasurer, Secretary,
+   Administrator and Homeowner. Designed to remain compact, readable and calm. */
+.record-filter-panel,
+.home-filter-panel {
+    margin: 0 0 14px;
+    padding: 14px 15px;
+    border: 1px solid #c9dbd0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f5faf7 0%, #eff6f2 100%);
+    box-shadow: 0 3px 10px rgba(20, 64, 43, .055);
+}
+
+.record-filter-header,
+.home-filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 11px;
+}
+
+.record-filter-title,
+.home-filter-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: #183d2c;
+}
+
+.record-filter-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: #dcebe1;
+    color: #245b40;
+    border: 1px solid #c6dacf;
+}
+
+.record-filter-title > div { min-width: 0; }
+.record-filter-title strong,
+.home-filter-title strong {
+    display: block;
+    color: #183d2c;
+    font-size: 14px;
+    line-height: 1.25;
+    font-weight: 750;
+}
+.record-filter-title small {
+    display: block;
+    margin-top: 2px;
+    color: #657b6f;
+    font-size: 12px;
+    line-height: 1.3;
+    font-weight: 500;
+}
+
+.record-filter-summary,
+.home-filter-summary {
+    color: #526b5e;
+    font-size: 13px;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+.record-filter-controls,
+.home-filter-controls {
+    display: grid;
+    grid-template-columns: minmax(250px, 1.6fr) repeat(4, minmax(125px, .72fr)) auto;
+    gap: 9px;
+    align-items: end;
+}
+
+.record-filter-search,
+.record-filter-field,
+.home-filter-field {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+}
+
+.record-filter-search > span,
+.record-filter-field > span,
+.home-filter-field > span,
+.record-page-size-field > span {
+    color: #526d5f;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.record-search-input,
+.home-filter-search { position: relative; min-width: 0; }
+.record-search-input i,
+.home-filter-search i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #698073;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.record-search-input input,
+.home-filter-search input,
+.record-filter-field select,
+.home-filter-field select,
+.record-filter-page-size {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #bfd2c6;
+    border-radius: 9px;
+    background: #fff;
+    color: #203e30;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 550;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.record-search-input input,
+.home-filter-search input { padding: 0 12px 0 36px; }
+.record-filter-field select,
+.home-filter-field select,
+.record-filter-page-size { padding: 0 30px 0 10px; }
+
+.record-search-input input:focus,
+.home-filter-search input:focus,
+.record-filter-field select:focus,
+.home-filter-field select:focus,
+.record-filter-page-size:focus {
+    border-color: #4b8063;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, .10);
+}
+
+.record-filter-clear,
+.home-filter-clear {
+    height: 40px;
+    padding: 0 13px;
+    border: 1px solid #bfd1c6;
+    border-radius: 9px;
+    background: #fff;
+    color: #2d5b43;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.record-filter-clear:hover,
+.home-filter-clear:hover { background: #e6f1e9; border-color: #abc6b5; }
+.record-filter-clear:disabled { opacity: .5; cursor: default; }
+
+.record-filter-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #d9e6de;
+}
+.record-page-size-field { display: inline-flex; align-items: center; gap: 7px; color: #526d5f; }
+.record-filter-page-size { width: 72px; height: 34px; font-size: 13px; }
+
+.record-filter-pager { display: flex; align-items: center; gap: 7px; }
+.record-filter-pager button {
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid #bfd1c6;
+    border-radius: 8px;
+    background: #fff;
+    color: #28583f;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.record-filter-pager button:hover:not(:disabled) { background: #e7f1ea; }
+.record-filter-pager button:disabled { opacity: .4; cursor: default; }
+.record-filter-page-text { min-width: 95px; text-align: center; color: #5b7165; font-size: 12px; font-weight: 650; }
+.record-sort-direction[hidden] { display: none !important; }
+
+.record-filter-empty td { padding: 24px 14px !important; background: #fbfdfb !important; }
+.record-empty-message { display: flex; align-items: center; justify-content: center; gap: 10px; color: #607569; }
+.record-empty-message i { color: #5b816b; font-size: 18px; }
+.record-empty-message span { display: grid; gap: 2px; }
+.record-empty-message strong { color: #365845; font-size: 14px; }
+.record-empty-message small { font-size: 12px; }
+
+/* Homeowner panels keep the same visual language. */
+.home-filter-panel { margin: 0 0 16px; }
+.home-filter-title { gap: 9px; }
+.home-filter-title i { color: #2d6a4f; font-size: 14px; }
+.home-filter-controls.home-request-controls { grid-template-columns: minmax(250px, 1.55fr) repeat(4, minmax(125px, .7fr)) auto; }
+.home-service-filter-panel { margin-bottom: 18px; }
+.home-service-filter-panel .home-filter-controls { grid-template-columns: minmax(260px, 1.5fr) minmax(170px, .65fr) auto; }
+.home-filter-empty-state {
+    padding: 25px 18px;
+    border: 1px dashed #c8d9cf;
+    border-radius: 11px;
+    background: #f8fbf9;
+    color: #60766a;
+    text-align: center;
+}
+.home-filter-empty-state strong { display: block; margin-bottom: 4px; color: #315744; }
+.category-record-count {
+    display: inline-flex;
+    align-items: center;
+    min-height: 27px;
+    padding: 0 9px;
+    border-radius: 999px;
+    background: #edf5f0;
+    color: #315a45;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Keep table cards usable when filters are present. */
+.content-card > .record-filter-panel,
+.review-queue-card > .record-filter-panel { margin-left: 0; margin-right: 0; }
+.tab-content .table-responsive { position: relative; }
+
+@media (max-width: 1280px) {
+    .record-filter-controls,
+    .home-filter-controls,
+    .home-filter-controls.home-request-controls {
+        grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(125px, .75fr)) auto;
+    }
+}
+
+@media (max-width: 980px) {
+    .record-filter-controls,
+    .home-filter-controls,
+    .home-filter-controls.home-request-controls,
+    .home-service-filter-panel .home-filter-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .record-filter-search,
+    .home-filter-search { grid-column: 1 / -1; }
+    .record-filter-clear,
+    .home-filter-clear { width: 100%; }
+}
+
+@media (max-width: 600px) {
+    .record-filter-panel,
+    .home-filter-panel { padding: 12px; border-radius: 10px; }
+    .record-filter-header,
+    .home-filter-header { align-items: flex-start; flex-direction: column; gap: 5px; }
+    .record-filter-summary,
+    .home-filter-summary { white-space: normal; }
+    .record-filter-controls,
+    .home-filter-controls,
+    .home-filter-controls.home-request-controls,
+    .home-service-filter-panel .home-filter-controls { grid-template-columns: 1fr; }
+    .record-filter-search,
+    .home-filter-search { grid-column: auto; }
+    .record-filter-footer { align-items: stretch; flex-direction: column; }
+    .record-filter-pager { justify-content: space-between; }
+    .record-filter-pager button span { display: none; }
+}
+
+
+/* Compact action grouping prevents officer/admin action buttons from wrapping into tall rows. */
+.table-action-group { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.table-action-group .inline-form { display:inline-flex; margin:0; }
+@media (max-width:700px) { .table-action-group { min-width:190px; } }
+
+
+/* BSIS integrated workflow configuration / reporting refinements */
+.dynamic-service-catalog { display:block; }
+.service-catalog-loading { display:flex; align-items:center; gap:10px; min-height:90px; justify-content:center; color:#4f655c; font-size:14px; }
+.service-table-description { display:block; margin-top:4px; max-width:300px; color:#687970; font-size:12px; line-height:1.35; }
+.service-workflow-chips { display:flex; flex-wrap:wrap; gap:5px; max-width:320px; }
+.service-workflow-chips span { padding:3px 7px; border:1px solid #d4e2da; border-radius:999px; background:#f5faf7; color:#294c3c; font-size:11px; white-space:nowrap; }
+.service-special-fee { color:#49675a; font-size:12px; font-weight:600; }
+.service-type-modal { width:min(720px, calc(100vw - 32px)); }
+.service-config-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.service-config-wide { grid-column:1/-1; }
+.service-config-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 16px; padding:12px 14px; border:1px solid #dce7e1; border-radius:10px; background:#f8fbf9; }
+.service-config-options label { display:flex; align-items:center; gap:8px; font-size:13px; color:#294438; }
+.processing-report-summary { display:grid; grid-template-columns:repeat(2,minmax(0,220px)); gap:12px; margin:0 0 16px; }
+.processing-report-summary > div { padding:12px 14px; border:1px solid #d8e5dd; border-radius:10px; background:#f7faf8; }
+.processing-report-summary span { display:block; color:#687970; font-size:12px; margin-bottom:3px; }
+.processing-report-summary strong { color:#123e2d; font-size:20px; }
+.sticker-validity-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:12px; border:1px solid #d8e5dd; border-radius:10px; background:#f7faf8; margin-bottom:14px; }
+.request-validity-note { padding:8px 10px; background:#f3f8f5; border-left:3px solid #2d6a4f; color:#294438; font-size:13px; }
+@media (max-width:700px){ .service-config-grid,.service-config-options,.sticker-validity-fields,.processing-report-summary{grid-template-columns:1fr;} .service-config-wide{grid-column:auto;} }

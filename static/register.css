@@ -1,0 +1,319 @@
+:root {
+    /* Palette variables — unchanged from the original stylesheet */
+    --primary-accent: #1B4332;       /* Brand authority headers & sidebar */
+    --primary-action: #2D6A4F;       /* CTAs and buttons */
+    --primary-hover: #1e4b37;        /* Darker green shift for button hover states */
+    --bg-global: #F4F9F4;            /* Main body background */
+    --bg-container: #E2EBE2;         /* Cards, inputs, and layered sections */
+    --text-main: #2D312E;            /* Body copy, labels, and text */
+    --text-muted: #4F5551;           /* Softer, secondary text balance */
+
+    /* New: shared shape/elevation tokens (no new colors) */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --shadow-md: 0 10px 30px rgba(27, 67, 50, 0.10);
+    --shadow-lg: 0 24px 60px rgba(27, 67, 50, 0.14);
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: var(--bg-global);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Container for the Auth Card */
+.auth-container {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    min-height: 550px;
+    overflow: hidden;
+    transition: all 0.3s var(--ease);
+}
+
+/* Left Side: Branding / Hero */
+.brand-side {
+    background: var(--primary-accent);
+    color: #ffffff;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 44px 40px;
+    text-align: center;
+}
+
+/* Logo Frame & Styling */
+.logo-container {
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    background-color: var(--bg-container);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 26px;
+    border: 4px solid rgba(255, 255, 255, 0.22);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.brand-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.brand-side h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.brand-side p {
+    font-size: 0.86rem;
+    opacity: 0.85;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* Right Side: Forms */
+.form-side {
+    width: 60%;
+    padding: 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-box {
+    display: none;
+}
+
+.form-box.active {
+    display: block;
+    animation: fadeIn 0.35s var(--ease) forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-box h2 {
+    font-size: 1.7rem;
+    color: var(--primary-accent);
+    margin-bottom: 6px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.form-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+/* Form Layout Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.input-group.full-width {
+    margin-bottom: 22px;
+}
+
+.input-group label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Input fields */
+.input-group input {
+    padding: 12px 16px;
+    border: 1px solid rgba(27, 67, 50, 0.15);
+    border-radius: var(--radius-sm);
+    font-size: 0.94rem;
+    color: var(--text-main);
+    background-color: var(--bg-container);
+    transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+
+.input-group input::placeholder { color: var(--text-muted); opacity: 0.7; }
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-action);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
+}
+
+/* Buttons & Toggles */
+.btn-submit {
+    background-color: var(--primary-action);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.98rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.15s var(--ease);
+    width: 100%;
+    margin-top: 6px;
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-submit:active { transform: translateY(1px); }
+
+.btn-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.toggle-text {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.toggle-text a {
+    color: var(--primary-action);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.toggle-text a:hover {
+    text-decoration: underline;
+    color: var(--primary-accent);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .auth-container {
+        flex-direction: column;
+        max-width: 450px;
+        border-radius: var(--radius-md);
+    }
+    .brand-side {
+        width: 100%;
+        padding: 32px 20px;
+    }
+    .logo-container {
+        width: 96px;
+        height: 96px;
+        margin-bottom: 18px;
+    }
+    .form-side {
+        width: 100%;
+        padding: 32px 24px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .full-width {
+        grid-column: span 1;
+    }
+}
+\n\n/* Professional inactive-session notice */\n.session-expired-notice {\n    display:flex; align-items:flex-start; gap:11px; margin:14px 0 18px; padding:12px 14px;\n    border:1px solid #d7e7dd; border-left:3px solid #2D6A4F; border-radius:9px; background:#f2f7f4; color:#355246;\n}\n.session-expired-icon { flex:0 0 auto; color:#2D6A4F; font-size:17px; line-height:1.3; }\n.session-expired-notice div { display:flex; flex-direction:column; gap:2px; }\n.session-expired-notice strong { color:#214c39; font-size:.88rem; }\n.session-expired-notice span:not(.session-expired-icon) { color:#62726b; font-size:.8rem; line-height:1.45; }\n
+/* NFH-HOA unified typography */
+*, body, button, input, select, textarea { font-family:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+
+
+
+/* Technical usability controls */
+.password-field{position:relative;display:flex;align-items:center;width:100%}.password-field input{width:100%;padding-right:58px!important}.password-toggle{position:absolute;right:8px;border:0;background:transparent;color:#2d6a4f;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;padding:5px 6px;border-radius:6px}.password-toggle:hover,.password-toggle:focus-visible{background:#edf6f0;outline:2px solid rgba(45,106,79,.18);outline-offset:1px}.password-toggle:disabled{opacity:.45;cursor:not-allowed}.password-inline-message{display:block;min-height:16px;margin-top:4px;font-size:.75rem;color:#9a5b13}.password-requirements{display:block;margin-top:4px;font-size:.75rem;color:#6b756f}.password-match-message{display:block;min-height:16px;margin-top:4px;font-size:.75rem}.password-match-message.is-valid{color:#2d6a4f}.password-match-message.is-invalid{color:#b42318}button:disabled,.btn:disabled{cursor:not-allowed;opacity:.62}.btn[aria-busy="true"],button[aria-busy="true"]{pointer-events:none}
+
+/* Icon-only password controls */
+.password-field{position:relative;display:flex;align-items:center;width:100%}
+.password-field input{width:100%;padding-right:76px!important}
+.password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;display:grid;place-items:center;border:0;background:transparent;color:#2d6a4f;cursor:pointer;padding:6px;border-radius:7px}
+.password-toggle:hover,.password-toggle:focus-visible{background:#edf6f0;outline:2px solid rgba(45,106,79,.18);outline-offset:1px}
+.password-toggle:disabled{opacity:.45;cursor:not-allowed}
+.password-toggle .eye-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.caps-lock-icon{position:absolute;right:47px;top:50%;transform:translateY(-50%);width:24px;height:24px;display:grid;place-items:center;color:#9a5b13;font-size:19px;font-weight:800;line-height:1;pointer-events:none}
+.caps-lock-icon[hidden]{display:none!important}
+.password-inline-message:empty{display:none}
+
+
+/* NFH-HOA authentication feedback — replaces browser-native alerts */
+.auth-alert{display:grid;grid-template-columns:34px minmax(0,1fr) 28px;gap:10px;align-items:start;width:100%;padding:13px 14px;margin:0 0 18px;border:1px solid;border-radius:12px;font-size:.84rem;line-height:1.45;box-shadow:0 7px 20px rgba(25,55,39,.06)}
+.auth-alert[hidden]{display:none}.auth-alert-icon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:800}.auth-alert strong,.auth-alert span{display:block}.auth-alert-title{font-size:.84rem;margin:1px 0 2px}.auth-alert-message{font-size:.79rem}.auth-alert-close{border:0;background:transparent;font-size:1.25rem;line-height:1;color:inherit;opacity:.65;cursor:pointer;padding:3px;border-radius:6px}.auth-alert-close:hover{opacity:1;background:rgba(0,0,0,.04)}.auth-alert-close:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.auth-alert-error{background:#fff5f5;border-color:#efcaca;color:#8c2f2f}.auth-alert-error .auth-alert-icon{background:#f9dddd;color:#a33131}
+.auth-alert-warning{background:#fff9ec;border-color:#ead9ad;color:#755717}.auth-alert-warning .auth-alert-icon{background:#f5e8c4;color:#806018}
+.auth-alert-success{background:#f0f8f3;border-color:#c8dfd0;color:#225d3d}.auth-alert-success .auth-alert-icon{background:#dceee2;color:#225d3d}
+#signin-alert{margin-top:-12px;margin-bottom:20px}
+@media(max-width:600px){.auth-alert{grid-template-columns:30px minmax(0,1fr) 24px;padding:11px 12px}.auth-alert-icon{width:27px;height:27px}}
+
+/* 2026-09-21 — authentication experience modernization */
+body{background:radial-gradient(circle at 12% 14%,rgba(45,106,79,.12),transparent 28%),radial-gradient(circle at 92% 88%,rgba(27,67,50,.08),transparent 30%),#f3f7f4;padding:clamp(16px,3vw,36px)}
+.auth-container{max-width:1060px;min-height:650px;border:1px solid rgba(27,67,50,.09);border-radius:28px;box-shadow:0 32px 90px rgba(18,62,45,.16)}
+.brand-side{width:43%;position:relative;overflow:hidden;align-items:flex-start;text-align:left;padding:58px 52px;background:linear-gradient(145deg,#0b3e2d,#155b42 72%,#1f6b4e)}
+.brand-side:before,.brand-side:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.10)}
+.brand-side:before{width:360px;height:360px;right:-190px;top:-90px}.brand-side:after{width:270px;height:270px;left:-155px;bottom:-120px}
+.auth-back-home{position:absolute;top:28px;left:32px;color:rgba(255,255,255,.82);text-decoration:none;font-size:.78rem;font-weight:600;z-index:2}.auth-back-home:hover{color:#fff}.brand-kicker{margin:44px 0 24px;color:#acd2bd;font-size:.7rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.logo-container{width:92px;height:92px;margin:0 0 24px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);box-shadow:none}.brand-logo{object-fit:contain}.brand-side h1{font-size:2rem;letter-spacing:-.035em}.brand-side>p{font-size:.88rem;color:#c7ddd1;opacity:1;margin-top:4px}.brand-message{display:grid;gap:8px;margin-top:48px;padding-top:24px;border-top:1px solid rgba(255,255,255,.13);position:relative;z-index:1}.brand-message strong{font-size:1rem}.brand-message span{font-size:.82rem;line-height:1.65;color:#c7ddd1;max-width:34ch}.form-side{width:57%;padding:58px 64px;background:#fff}.form-box h2{font-size:2rem;letter-spacing:-.035em;color:#173e30}.form-subtitle{margin-bottom:28px;color:#718078}.input-group label{text-transform:none;letter-spacing:0;font-size:.78rem;color:#34473e}.input-group input{min-height:48px;padding:12px 14px;background:#f8faf8;border:1px solid #d9e3dc;border-radius:11px}.input-group input:focus{background:#fff;border-color:#4f8a6e;box-shadow:0 0 0 4px rgba(45,106,79,.10)}.btn-submit{min-height:48px;border-radius:11px;background:#155b42;box-shadow:0 9px 20px rgba(21,91,66,.13)}.btn-submit:hover{background:#0e4935}.toggle-text{margin-top:24px}.auth-alert{grid-template-columns:38px minmax(0,1fr) 30px;gap:11px;padding:12px 13px;margin-bottom:18px;border-radius:13px;box-shadow:none;align-items:center}.auth-alert-icon{width:36px;height:36px;border-radius:10px;font-size:.95rem}.auth-alert-title{font-size:.82rem;margin:0 0 1px}.auth-alert-message{font-size:.78rem;line-height:1.45}.auth-alert-error{background:#fff7f7;border-color:#efcccc;color:#8e3535}.auth-alert-error .auth-alert-icon{background:#f8dddd}.auth-alert-close{width:28px;height:28px;display:grid;place-items:center;padding:0}.session-expired-notice{border-left-width:1px!important;border-radius:12px!important}.form-grid{gap:14px 16px}.form-grid .input-group{margin-bottom:5px}.form-grid .input-group.full-width{margin-bottom:5px}
+@media(max-width:850px){.auth-container{max-width:620px;flex-direction:column}.brand-side,.form-side{width:100%}.brand-side{padding:72px 34px 32px;min-height:280px}.brand-kicker{margin:16px 0}.logo-container{width:70px;height:70px}.brand-side h1{font-size:1.55rem}.brand-message{margin-top:22px;padding-top:18px}.form-side{padding:38px 34px}}
+@media(max-width:520px){body{padding:0;background:#fff;align-items:flex-start}.auth-container{border:0;border-radius:0;box-shadow:none;min-height:100vh}.brand-side{min-height:230px;padding:64px 24px 26px}.auth-back-home{left:24px;top:22px}.brand-kicker{display:none}.logo-container{width:62px;height:62px;margin-bottom:14px}.brand-side h1{font-size:1.35rem}.brand-message{display:none}.form-side{padding:32px 22px}.form-box h2{font-size:1.65rem}.form-grid{grid-template-columns:1fr}.full-width{grid-column:span 1}}
+
+/* 2026-09-30 readability polish only */
+body{background:radial-gradient(circle at 80% 12%,rgba(45,106,79,.10),transparent 30%),linear-gradient(135deg,#f4f8f5,#edf5ef)!important}
+.input-group label{font-size:.8rem!important;color:#33483d!important}.input-group input{font-size:.92rem!important}.form-subtitle{color:#63756c!important}.auth-container{border:1px solid rgba(27,67,50,.09)}
+
+
+/* 2026-10-01: one-time homeowner profile capture during registration */
+.registration-profile-note { border:1px solid #c9dbd1; background:#f3f8f5; color:#173f2d; border-radius:12px; padding:12px 14px; margin-bottom:2px; }
+.registration-profile-note strong { display:block; font-size:14px; margin-bottom:2px; }
+.registration-profile-note span { display:block; font-size:12.5px; color:#65736b; line-height:1.45; }
+.registration-subsection { border-top:1px solid #e2e9e5; padding-top:12px; margin-top:3px; }
+.registration-subsection strong { display:block; color:#173f2d; font-size:14px; }
+.registration-subsection span { display:block; color:#6a756f; font-size:12px; margin-top:2px; }
+#signup-form select { width:100%; min-height:44px; border:1px solid #cdd8d2; border-radius:9px; background:#fff; color:#233029; padding:0 11px; font:inherit; }
+
+
+/* Center authentication state icons consistently */
+.auth-alert{align-items:center!important}.auth-alert-icon{display:grid!important;place-items:center!important;align-self:center!important;justify-self:center!important;line-height:1!important;text-align:center!important}.session-expired-icon{display:grid!important;place-items:center!important;align-self:center!important;line-height:1!important}.auth-alert>div{min-width:0}
+
+.required-marker{color:#b42318;font-weight:800}.field-invalid{border-color:#b42318!important;box-shadow:0 0 0 3px rgba(180,35,24,.12)!important}.field-validation-message{display:block;margin-top:5px;color:#9f1c14;font-size:13px;font-weight:650}.input-group label small{font-size:.72rem;text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:600}
